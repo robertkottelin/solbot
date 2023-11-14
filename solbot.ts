@@ -1,7 +1,7 @@
 import { Connection, Keypair, clusterApiUrl } from '@solana/web3.js';
 import { getOrca, OrcaFarmConfig, OrcaPoolConfig } from "@orca-so/sdk";
 
-import { AldrinApiPoolsClient } from "@aldrin-exchange/sdk";
+import { AldrinApiPoolsClient } from '@aldrin_exchange/sdk';
 
 import Decimal from "decimal.js";
 import axios from 'axios';

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@aldrin_exchange/sdk": "^0.4.51",
     "@orca-so/sdk": "^1.2.26",
     "@solana/web3.js": "^1.87.6",
     "axios": "^1.6.1",
