@@ -1,4 +1,9 @@
 import { Connection, Keypair, clusterApiUrl } from '@solana/web3.js';
+import { getOrca, OrcaFarmConfig, OrcaPoolConfig } from "@orca-so/sdk";
+
+import { AldrinApiPoolsClient } from "@aldrin-exchange/sdk";
+
+import Decimal from "decimal.js";
 import axios from 'axios';
 import dotenv from 'dotenv';
 
@@ -11,6 +16,17 @@ const wallet = Keypair.fromSecretKey(Uint8Array.from(secretKey));
 
 // Initialize a connection to the Solana network
 const connection = new Connection(clusterApiUrl('devnet'));
+
+async function getTotalVolumeLocked() {
+    const client = new AldrinApiPoolsClient()
+  
+    const tvl = await client.getTotalVolumeLocked()
+    console.log('TVL: ', tvl)
+  
+    const poolsInfo = await client.getPoolsInfo()
+  
+    console.log('poolsInfo: ', poolsInfo)
+  }
 
 // Function to get SOL price from Aldrin
 async function getSOLPriceFromAldrin() {
@@ -64,4 +80,5 @@ async function performArbitrage() {
 }
 
 // Start arbitrage
-performArbitrage().catch(console.error);
+// performArbitrage().catch(console.error);
+getTotalVolumeLocked().catch(console.error);
