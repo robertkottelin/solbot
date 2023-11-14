@@ -1,5 +1,5 @@
 import { Connection, Keypair, clusterApiUrl } from '@solana/web3.js';
-import { getOrca, OrcaFarmConfig, OrcaPoolConfig } from "@orca-so/sdk";
+import { Orca, getOrca, OrcaFarmConfig, OrcaPoolConfig } from "@orca-so/sdk";
 
 import { AldrinApiPoolsClient } from '@aldrin_exchange/sdk';
 
@@ -11,22 +11,23 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Parse the private key from the environment variable
-const secretKey = JSON.parse(process.env.SOLANA_PRIVATE_KEY || '');
-const wallet = Keypair.fromSecretKey(Uint8Array.from(secretKey));
+// const secretKey = JSON.parse(process.env.SOLANA_PRIVATE_KEY || '');
+// const wallet = Keypair.fromSecretKey(Uint8Array.from(secretKey));
 
 // Initialize a connection to the Solana network
 const connection = new Connection(clusterApiUrl('devnet'));
 
-async function getTotalVolumeLocked() {
-    const client = new AldrinApiPoolsClient()
-  
-    const tvl = await client.getTotalVolumeLocked()
-    console.log('TVL: ', tvl)
-  
-    const poolsInfo = await client.getPoolsInfo()
-  
-    console.log('poolsInfo: ', poolsInfo)
-  }
+// write a function to test the https://api.orca.so endpoint and log the response
+async function testOrca() {
+    const orca = await getOrca(connection);
+    const orcaSolPool = orca.getPool(OrcaPoolConfig.ORCA_SOL);
+    const solToken = orcaSolPool.getTokenB();
+    const solAmount = new Decimal(0.1);
+    const quote = await orcaSolPool.getQuote(solToken, solAmount);
+    const orcaAmount = quote.getMinOutputAmount();
+    console.log(orcaAmount);
+    return solToken;
+}
 
 // Function to get SOL price from Aldrin
 async function getSOLPriceFromAldrin() {
@@ -81,4 +82,4 @@ async function performArbitrage() {
 
 // Start arbitrage
 // performArbitrage().catch(console.error);
-getTotalVolumeLocked().catch(console.error);
+testOrca().catch(console.error);
